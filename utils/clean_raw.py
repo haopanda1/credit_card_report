@@ -6,10 +6,12 @@ from typing import List, Tuple, Dict
 
 ### data cleaning class - transformation & cleanning
 class raw_credit_report_data_cleaning():
+    def __init__(self, spark):
+        self.spark = spark
 
-    def create_payment_data(raw_payment_data: List[str]) -> DataFrame:
+    def create_payment_data(self, raw_payment_data: List[str]) -> DataFrame:
         raw_payment_data = [tuple(x.split('\n')[1:]) for x in raw_payment_data]
-        df_payment = spark.createDataFrame(raw_payment_data, ['Date', 'Description', 'Amount'])
+        df_payment = self.spark.createDataFrame(raw_payment_data, ['Date', 'Description', 'Amount'])
         df_payment = (
             df_payment.
                 select(*[
@@ -20,9 +22,9 @@ class raw_credit_report_data_cleaning():
         )
         return df_payment
 
-    def create_transaction_data(raw_transaction_data: List[str]) -> DataFrame:
+    def create_transaction_data(self, raw_transaction_data: List[str]) -> DataFrame:
         raw_transaction_data = [tuple(x.split('\n')[1:]) for x in raw_transaction_data]
-        df_transaction = spark.createDataFrame(raw_transaction_data, ['Date', 'Description', 'Daily Cash Perc', 'Daily Cash', 'Amount'])
+        df_transaction = self.spark.createDataFrame(raw_transaction_data, ['Date', 'Description', 'Daily Cash Perc', 'Daily Cash', 'Amount'])
         df_transaction = (
             df_transaction.
                 select(*[
@@ -46,9 +48,9 @@ class raw_credit_report_data_cleaning():
         )
         return df_transaction
 
-    def create_installment_data(raw_installment_data: List[str]) -> DataFrame:
+    def create_installment_data(self, raw_installment_data: List[str]) -> DataFrame:
         raw_installment_data = [tuple(x.split('\n')[1:]) for x in raw_installment_data]
-        df_transaction = spark.createDataFrame(raw_installment_data, ['Date', 'Apple_Installment_Loc','Amount', 'Transaction_ID'])   
+        df_transaction = self.spark.createDataFrame(raw_installment_data, ['Date', 'Apple_Installment_Loc','Amount', 'Transaction_ID'])   
         df_transaction = (
             df_transaction.
                 select(
