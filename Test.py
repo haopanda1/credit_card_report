@@ -60,32 +60,6 @@ holder_payment, holder_transaction, holder_installments =  raw_credit_report_dat
 
 # COMMAND ----------
 
-holder_payment = []
-holder_transaction = []
-holder_installments = []
-
-# COMMAND ----------
-
-for page in range(len(my_credit_report.pages)):
-    page_content = my_credit_report.pages[page].extract_text().replace(',','')
-
-    holder_installments.append(regex_installments.findall(page_content))
-    page_content = regex_installments.sub('', page_content)
-
-    holder_transaction.append(regex_transaction.findall(page_content))
-    page_content = regex_transaction.sub('', page_content)
-
-    holder_payment.append(regex_payment.findall(page_content))
-    page_content = regex_payment.sub('', page_content)
-
-# COMMAND ----------
-
-holder_payment = [y for x in holder_payment for y in x]
-holder_transaction = [y for x in holder_transaction for y in x]
-holder_installments = [y for x in holder_installments for y in x]
-
-# COMMAND ----------
-
 # MAGIC %md 
 # MAGIC
 # MAGIC ##### Clean and Make DF
