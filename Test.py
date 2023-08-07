@@ -31,10 +31,7 @@ regex_installments = re.compile(r'\n\d{2}\/\d{2}\/\d{4}\n.+\n[-+]?\$\d{1,1000}\.
 
 # COMMAND ----------
 
-adls_file_path = r'abfss://csvlake@datalakegen2hao.dfs.core.windows.net/credit_card_report/Apple Card Statement - May 2023.pdf'
-target_file_path = r'dbfs:/FileStore/my_expense_report_apple/Apple Card Statement - May 2023.pdf'
-access_target_file_path = r'/dbfs/FileStore/my_expense_report_apple/Apple Card Statement - May 2023.pdf'
-# dbutils.fs.cp(adls_file_path, target_file_path)
+access_target_file_path = r'/Volumes/expense_report/apple_card/reports/Apple Card Statement - May 2023.pdf'
 
 # COMMAND ----------
 
@@ -112,7 +109,7 @@ def create_payment_data(raw_payment_data: List[str]) -> DataFrame:
             select(*[
                 F.to_timestamp(F.col('Date'), format='MM/dd/yyyy').alias('credit_payment_date'),
                 F.trim(F.col('Description')).alias('credit_payment_description'), 
-                F.regexp_replace(F.col('Amount'), pattern='[-|$]', replacement='').cast(T.FloatType()).alias('credit_payment_amount_usd')
+                F.regexp_replace(F.col('Amount'), pattern='[-|$]', replacement='').cast(T.DecimalType(precision=10, scale=2)).alias('credit_payment_amount_usd')
             ])            
     )
     return df_payment
@@ -138,11 +135,9 @@ def create_transaction_data(raw_transaction_data: List[str]) -> DataFrame:
                         ''
                     )
                 )).alias('trans_store'),
-                F.regexp_extract(F.col('Description'), '\d{3}-\d{3}-\d{4}', 0).alias('trans_store_number'),
-                F.regexp_extract(F.regexp_replace(F.col('Description'), '\d{3}-\d{3}-\d{4}', ''), '\d.*', 0).alias('trans_store_location'),
-                (F.regexp_extract(F.col('Daily Cash Perc'), '\d', 0).cast(T.FloatType()) / 100).alias('trans_cash_perc'),
-                F.regexp_replace(F.col('Daily Cash'), '\$', '').cast(T.FloatType()).alias('trans_cashback_amount'),
-                F.regexp_replace(F.col('Amount'), '\$', '').cast(T.FloatType()).alias('trans_cash_amount')
+                (F.regexp_extract(F.col('Daily Cash Perc'), '\d', 0).cast(T.DecimalType(precision=10, scale=2)) / 100).alias('trans_cash_perc'),
+                F.regexp_replace(F.col('Daily Cash'), '\$', '').cast(T.DecimalType(precision=10, scale=2)).alias('trans_cashback_amount'),
+                F.regexp_replace(F.col('Amount'), '\$', '').cast(T.DecimalType(precision=10, scale=2)).alias('trans_cash_amount')
             ])
     )
     return df_transaction
@@ -153,17 +148,19 @@ def create_installment_data(raw_installment_data: List[str]) -> DataFrame:
     raw_installment_data = [tuple(x.split('\n')[1:]) for x in raw_installment_data]
     df_transaction = spark.createDataFrame(raw_installment_data, ['Date', 'Apple_Installment_Loc','Amount', 'Transaction_ID'])   
     df_transaction = (
-        
+        df_transaction.
+            select(
+                F.to_timestamp(F.col('Date'), format='MM/dd/yyyy').alias('transaction_date'),
+                F.col('Apple_Installment_Loc').alias('apple_installment_loc'),
+                F.regexp_extract(F.col('Transaction_ID'), r'[1-9]\w+', 0).alias('transaction_id'),
+                F.regexp_replace(F.col('Amount'), '\$', '').cast(T.DecimalType(precision=10, scale=2)).alias('transaction_amount')
+        )
     )
     return df_transaction
 
 # COMMAND ----------
 
-display(create_installment_data(holder_installments))
-
-# COMMAND ----------
-
-holder_installments
+display(create_transaction_data(holder_transaction))
 
 # COMMAND ----------
 
