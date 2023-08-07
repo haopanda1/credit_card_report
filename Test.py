@@ -107,9 +107,10 @@ holder_installments = [y for x in holder_installments for y in x]
 
 # COMMAND ----------
 
-df_payment = raw_credit_report_data_cleaning.create_payment_data(holder_payment)
-df_transaction = raw_credit_report_data_cleaning.create_transaction_data(holder_transaction)
-df_installment = raw_credit_report_data_cleaning.create_installment_data(holder_installments)
+data_transformer = raw_credit_report_data_cleaning(spark)
+df_payment = data_transformer.create_payment_data(holder_payment)
+df_transaction = data_transformer.create_transaction_data(holder_transaction)
+df_installment = data_transformer.create_installment_data(holder_installments)
 
 # COMMAND ----------
 
