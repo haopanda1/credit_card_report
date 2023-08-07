@@ -7,27 +7,8 @@ from typing import List, Tuple, Dict
 
 # COMMAND ----------
 
-from pyspark.sql import functions as F
-from pyspark.sql.dataframe import DataFrame
-from pyspark.sql import types as T
-from pyspark.sql.utils import AnalysisException
-from pyspark.sql.window import Window, WindowSpec
-
-# COMMAND ----------
-
+from utils.extract_raw import raw_credit_report_data_extraction
 from utils.clean_raw import raw_credit_report_data_cleaning
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC
-# MAGIC ##### Define Pattern 
-
-# COMMAND ----------
-
-regex_payment = re.compile(r'\n\d{2}\/\d{2}\/\d{4}\n.+\n[-]?\$\d{1,1000}\.\d{1,1000}')
-regex_transaction = re.compile(r'\n\d{2}\/\d{2}\/\d{4}\n.+\n\d{1}%\n[-+]?\$\d{1,1000}\.\d{1,1000}\n[-+]?\$\d{1,1000}\.\d{1,1000}')
-regex_installments = re.compile(r'\n\d{2}\/\d{2}\/\d{4}\n.+\n[-+]?\$\d{1,1000}\.\d{1,1000}\s\nTRANSACTION\s.*')
 
 # COMMAND ----------
 
@@ -72,6 +53,10 @@ print(meta_title)
 # MAGIC %md 
 # MAGIC
 # MAGIC ##### Extract
+
+# COMMAND ----------
+
+holder_payment, holder_transaction, holder_installments =  raw_credit_report_data_extraction().extract(my_credit_report)
 
 # COMMAND ----------
 

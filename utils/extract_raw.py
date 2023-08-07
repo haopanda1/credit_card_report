@@ -14,17 +14,17 @@ class raw_credit_report_data_extraction():
         for page in range(len(my_credit_report.pages)):
             page_content = my_credit_report.pages[page].extract_text().replace(',','')
 
-            holder_installments.append(regex_installments.findall(page_content))
-            page_content = regex_installments.sub('', page_content)
+            holder_installments.append(self.regex_installments.findall(page_content))
+            page_content = self.regex_installments.sub('', page_content)
 
-            holder_transaction.append(regex_transaction.findall(page_content))
-            page_content = regex_transaction.sub('', page_content)
+            holder_transaction.append(self.regex_transaction.findall(page_content))
+            page_content = self.regex_transaction.sub('', page_content)
 
-            holder_payment.append(regex_payment.findall(page_content))
-            page_content = regex_payment.sub('', page_content)
-
-        holder_payment = [y for x in holder_payment for y in x]
-        holder_transaction = [y for x in holder_transaction for y in x]
-        holder_installments = [y for x in holder_installments for y in x]
-
-        return (holder_payment, holder_transaction, holder_installments)
+            holder_payment.append(self.regex_payment.findall(page_content))
+            page_content = self.regex_payment.sub('', page_content)
+            
+        return (
+            [y for x in holder_payment for y in x], 
+            [y for x in holder_transaction for y in x], 
+            [y for x in holder_installments for y in x]
+        )
