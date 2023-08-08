@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict, NoneType
+from typing import List, Tuple, Dict
 
 class checkpoint():
     def __init__(self, spark):
@@ -11,12 +11,12 @@ class checkpoint():
         all_files = self.__read_all_pdfs()
         return [all_file for all_file in list_pdfs if all_file not in checkpoints]
 
-    def append_new_file(self, file_dir: str) -> NoneType:
+    def append_new_file(self, file_dir: str) -> None:
         existing_files = self.__read_existing_checkpoints()
         with open(self.checkpoint_file_path, 'w') as file:
             file.write('/n'.join(existing_files.append(file_dir)))
 
-    def __read_existing_checkpoints(self) -> NoneType:
+    def __read_existing_checkpoints(self) -> None:
         with open(self.checkpoint_file_path, 'r') as file: 
             return file.read().split('\n')
     

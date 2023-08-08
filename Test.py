@@ -9,7 +9,7 @@ from utils.checkpoint_functions import checkpoint
 
 pdf_extractor = raw_credit_report_data_extraction()
 data_transformer = raw_credit_report_data_cleaning(spark)
-check_func = checkpoint()
+check_func = checkpoint(spark)
 
 # COMMAND ----------
 
