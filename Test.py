@@ -36,6 +36,11 @@ for new_f in new_files:
 
 # COMMAND ----------
 
+var = '/vake/daf/dasfsf'
+f"LIST '{var}'"
+
+# COMMAND ----------
+
 # MAGIC %md 
 # MAGIC
 # MAGIC ##### Check New File and Write to CheckPoint

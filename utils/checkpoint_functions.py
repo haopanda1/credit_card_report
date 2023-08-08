@@ -5,6 +5,7 @@ class checkpoint():
         self.checkpoint_file_path = r'/Volumes/expense_report/apple_card/reports/credit_card_checkpoint.txt'
         self.volumn_path = r'/Volumes/expense_report/apple_card/reports/'
         self.spark = spark
+        print(f"LIST '{self.volumn_path}'")
 
     def find_new_files(self) -> List:
         existing_files = self.__read_existing_checkpoints()
