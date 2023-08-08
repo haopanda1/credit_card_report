@@ -19,6 +19,16 @@ from pyspark.sql import types as T
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC
+# MAGIC ##### full script
+
+# COMMAND ----------
+
+new_files = check_func.find_new_files()
+
+# COMMAND ----------
+
 new_files = check_func.find_new_files()
 
 for new_f in new_files: 

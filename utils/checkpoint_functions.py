@@ -22,7 +22,7 @@ class checkpoint():
     
     def __read_all_pdfs(self) -> List:
         list_pdfs = (
-            self.sparks.
+            self.spark.
                 sql(f"LIST {self.volumn_path}").
                 where(
                     F.locate('pdf', F.col('path')) != 0
