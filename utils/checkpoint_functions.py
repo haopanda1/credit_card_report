@@ -1,9 +1,10 @@
 from typing import List, Tuple, Dict, NoneType
 
 class checkpoint():
-    def __init__(self):
+    def __init__(self, spark):
         self.checkpoint_file_path = r'/Volumes/expense_report/apple_card/reports/credit_card_checkpoint.txt'
         self.volumn_path = r'/Volumes/expense_report/apple_card/reports/'
+        self.spark = spark
 
     def find_new_files(self) -> List:
         existing_files = self.__read_existing_checkpoints()
@@ -21,7 +22,7 @@ class checkpoint():
     
     def __read_all_pdfs(self) -> List:
         list_pdfs = (
-            spark.
+            self.sparks.
                 sql(f"LIST {self.volumn_path}").
                 where(
                     F.locate('pdf', F.col('path')) != 0

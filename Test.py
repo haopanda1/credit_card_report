@@ -3,6 +3,13 @@ from PyPDF2 import PdfReader
 
 from utils.extract_raw import raw_credit_report_data_extraction
 from utils.clean_raw import raw_credit_report_data_cleaning
+from utils.checkpoint_functions import checkpoint
+
+# COMMAND ----------
+
+pdf_extractor = raw_credit_report_data_extraction()
+data_transformer = raw_credit_report_data_cleaning(spark)
+check_func = checkpoint()
 
 # COMMAND ----------
 
@@ -12,44 +19,16 @@ from pyspark.sql import types as T
 
 # COMMAND ----------
 
+new_files = check_func.find_new_files()
+
+for new_f in new_files: 
+    
+
+# COMMAND ----------
+
 # MAGIC %md 
 # MAGIC
 # MAGIC ##### Check New File and Write to CheckPoint
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC
-# MAGIC ###### read checkpoint files
-
-# COMMAND ----------
-
-checkpoint_file_path = r'/Volumes/expense_report/apple_card/reports/credit_card_checkpoint.txt'
-
-# COMMAND ----------
-
-with open(checkpoint_file_path, 'r') as file: 
-    checkpoints = file.read().split('\n')
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC
-# MAGIC ###### read all pdfs
-
-# COMMAND ----------
-
-list_pdfs = (
-    spark.
-        sql("LIST '/Volumes/expense_report/apple_card/reports/'").
-        where(
-            F.locate('pdf', F.col('path')) != 0
-        ).
-        select(F.col('path')).
-        collect()
-)
-
-list_pdfs = [x.asDict()['path'] for x in list_pdfs]
 
 # COMMAND ----------
 
@@ -85,12 +64,6 @@ access_target_file_path = r'/Volumes/expense_report/apple_card/reports/Apple Car
 
 # COMMAND ----------
 
-import os 
-
-os.listdir(r'/Volumes/expense_report/apple_card/reports')
-
-# COMMAND ----------
-
 my_credit_report = PdfReader(access_target_file_path)
 
 # COMMAND ----------
@@ -101,7 +74,7 @@ my_credit_report = PdfReader(access_target_file_path)
 
 # COMMAND ----------
 
-holder_payment, holder_transaction, holder_installments =  raw_credit_report_data_extraction().extract(my_credit_report)
+holder_payment, holder_transaction, holder_installments =  pdf_extractor().extract(my_credit_report)
 
 # COMMAND ----------
 
@@ -111,7 +84,6 @@ holder_payment, holder_transaction, holder_installments =  raw_credit_report_dat
 
 # COMMAND ----------
 
-data_transformer = raw_credit_report_data_cleaning(spark)
 df_payment = data_transformer.create_payment_data(holder_payment)
 df_transaction = data_transformer.create_transaction_data(holder_transaction)
 df_installment = data_transformer.create_installment_data(holder_installments)
