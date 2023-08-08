@@ -118,4 +118,12 @@ df_installment = data_transformer.create_installment_data(holder_installments)
 
 # COMMAND ----------
 
+display(df_installment)
+
+# COMMAND ----------
+
+df_installment.printSchema()
+
+# COMMAND ----------
+
 
