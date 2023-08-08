@@ -1,11 +1,13 @@
 from typing import List, Tuple, Dict
+from pyspark.sql import functions as F
+from pyspark.sql.dataframe import DataFrame
+from pyspark.sql import types as T
 
 class checkpoint():
     def __init__(self, spark):
         self.checkpoint_file_path = r'/Volumes/expense_report/apple_card/reports/credit_card_checkpoint.txt'
         self.volumn_path = r'/Volumes/expense_report/apple_card/reports/'
         self.spark = spark
-        print(f"LIST '{self.volumn_path}'")
 
     def find_new_files(self) -> List:
         existing_files = self.__read_existing_checkpoints()
