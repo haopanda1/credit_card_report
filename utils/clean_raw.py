@@ -34,7 +34,7 @@ class raw_credit_report_data_cleaning():
                 T.StructField('transaction_date', T.TimestampType(), True), 
                 T.StructField('apple_installment_loc', T.StringType(), True), 
                 T.StructField('transaction_id', T.StringType(), True), 
-                T.StructField('transaction_amount', T.sdDecimalType(10,2), True)
+                T.StructField('transaction_amount', T.DecimalType(10,2), True)
             ]
         )
 
