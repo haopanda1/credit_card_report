@@ -1,12 +1,12 @@
 -- Databricks notebook source
-CREATE TABLE expense_report.apple_card.monthly_credit_card_payment
+CREATE OR REPLACE TABLE expense_report.apple_card.monthly_credit_card_payment
 (
   credit_payment_date TIMESTAMP,
   credit_payment_description STRING,
   credit_payment_amount_usd DECIMAL(10,2)
 );
 
-CREATE TABLE expense_report.apple_card.monthly_credit_transaction
+CREATE OR REPLACE TABLE expense_report.apple_card.monthly_credit_transaction
 (
   trans_date TIMESTAMP,
   trans_store_desc STRING ,
@@ -16,7 +16,7 @@ CREATE TABLE expense_report.apple_card.monthly_credit_transaction
   trans_cash_amount DECIMAL(10,2)
 );
 
-CREATE TABLE expense_report.apple_card.monthly_apple_installment_transaction
+CREATE OR REPLACE TABLE expense_report.apple_card.monthly_apple_installment_transaction
 (
   transaction_date TIMESTAMP,
   apple_installment_loc STRING ,
@@ -24,7 +24,7 @@ CREATE TABLE expense_report.apple_card.monthly_apple_installment_transaction
   transaction_amount DECIMAL(10, 2)
 );
 
-CREATE TABLE expense_report.apple_card.shopper_dim_table
+CREATE OR REPLACE TABLE expense_report.apple_card.shopper_dim_table
 (
   store_name STRING,
   store_category STRING,

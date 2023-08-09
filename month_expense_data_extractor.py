@@ -47,7 +47,3 @@ for new_f in check_func.find_new_files():
     print(f'file {new_f} processed successfully.')
     check_func.append_new_file(new_f)
     print(f'file {new_f} added to checkpoint file successfully')
-
-# COMMAND ----------
-
-

@@ -10,19 +10,20 @@ class checkpoint():
         self.spark = spark
 
     def find_new_files(self) -> List:
-        existing_files = self.__read_existing_checkpoints()
+        existing_files = self.__read_existing_checkpoints().split('\n')
         all_files = self.__read_all_pdfs()
         return [all_file for all_file in all_files if all_file not in existing_files]
 
     def append_new_file(self, file_dir: str) -> None:
         existing_files = self.__read_existing_checkpoints()
         with open(self.checkpoint_file_path, 'w') as file:
-            existing_files.append(file_dir)
-            file.write('/n'.join(existing_files))
+            file.write(existing_files)
+            file.write('\n')
+            file.write(file_dir)
 
     def __read_existing_checkpoints(self) -> None:
         with open(self.checkpoint_file_path, 'r') as file: 
-            return file.read().split('\n')
+            return file.read()
     
     def __read_all_pdfs(self) -> List:
         list_pdfs = (
