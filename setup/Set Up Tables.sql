@@ -26,12 +26,9 @@ CREATE OR REPLACE TABLE expense_report.apple_card.monthly_apple_installment_tran
 
 CREATE OR REPLACE TABLE expense_report.apple_card.shopper_dim_table
 (
+  store_name_raw STRING,
   store_name STRING,
   store_category STRING,
-  store_street_addr STRING,
-  store_city STRING,
-  store_county STRING,
-  store_zip STRING,
-  store_country STRING,
+  store_addr STRING,
   store_contact_number STRING
 );
