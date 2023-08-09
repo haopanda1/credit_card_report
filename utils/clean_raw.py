@@ -10,6 +10,8 @@ class raw_credit_report_data_cleaning():
     def __init__(self, spark):
         self.spark = spark
 
+        self.sparkContext = spark.sparkContext
+
         self.payment_schema = T.StructType(
             [
                 T.StructField('credit_payment_date', T.TimestampType(), True), 
@@ -52,7 +54,7 @@ class raw_credit_report_data_cleaning():
             )
             return df_payment
         except ValueError:
-            return sqlContext.createDataFrame(spark.sparkContext.emptyRDD(), self.payment_schema)
+            return SQLContext.createDataFrame(self.sparkContext.emptyRDD(), self.payment_schema)
 
     def create_transaction_data(self, raw_transaction_data: List[str]) -> DataFrame:
         try: 
@@ -81,7 +83,7 @@ class raw_credit_report_data_cleaning():
             )
             return df_transaction
         except ValueError:
-            return sqlContext.createDataFrame(spark.sparkContext.emptyRDD(), self.payment_schema)
+            return SQLContext.createDataFrame(self.sparkContext.emptyRDD(), self.transaction_schema)
 
     def create_installment_data(self, raw_installment_data: List[str]) -> DataFrame:
         try: 
@@ -98,4 +100,7 @@ class raw_credit_report_data_cleaning():
             )
             return df_transaction
         except ValueError:
-            return sqlContext.createDataFrame(spark.sparkContext.emptyRDD(), self.payment_schema)
+            from pyspark.sql import SQLContext
+            return sqlContext.createDataFrame(self.sparkContext.emptyRDD(), self.installment_schema)
+
+    
