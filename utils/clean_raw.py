@@ -1,7 +1,6 @@
 from pyspark.sql import functions as F
 from pyspark.sql.dataframe import DataFrame
 from pyspark.sql import types as T
-from pyspark.sql import SQLContext
 
 from typing import List, Tuple, Dict
 
@@ -54,7 +53,7 @@ class raw_credit_report_data_cleaning():
             )
             return df_payment
         except ValueError:
-            return SQLContext.createDataFrame(self.sparkContext.emptyRDD(), self.payment_schema)
+            return self.spark.createDataFrame(self.sparkContext.emptyRDD(), self.payment_schema)
 
     def create_transaction_data(self, raw_transaction_data: List[str]) -> DataFrame:
         try: 
@@ -83,7 +82,7 @@ class raw_credit_report_data_cleaning():
             )
             return df_transaction
         except ValueError:
-            return SQLContext.createDataFrame(self.sparkContext.emptyRDD(), self.transaction_schema)
+            return self.spark.createDataFrame(self.sparkContext.emptyRDD(), self.transaction_schema)
 
     def create_installment_data(self, raw_installment_data: List[str]) -> DataFrame:
         try: 
@@ -100,7 +99,6 @@ class raw_credit_report_data_cleaning():
             )
             return df_transaction
         except ValueError:
-            from pyspark.sql import SQLContext
-            return sqlContext.createDataFrame(self.sparkContext.emptyRDD(), self.installment_schema)
+            return self.spark.createDataFrame(self.sparkContext.emptyRDD(), self.installment_schema)
 
     
