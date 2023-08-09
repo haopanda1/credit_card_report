@@ -28,3 +28,6 @@ class raw_credit_report_data_extraction():
             [y for x in holder_transaction for y in x], 
             [y for x in holder_installments for y in x]
         )
+
+if __name__ == '__main__':
+    app = raw_credit_report_data_extraction()
